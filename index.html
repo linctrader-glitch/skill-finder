@@ -25,6 +25,23 @@ h1,h2,h3,.serif{font-family:Fraunces,Georgia,serif;font-weight:700;line-height:1
 header{background:var(--maroon);color:#fbf6ee}
 header .brand{font-weight:700;color:var(--gold);font-size:15px;margin-bottom:12px}
 header h1{font-size:clamp(32px,5vw,52px);max-width:18ch}
+.hero{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:clamp(24px,4vw,64px);align-items:center}
+.note{position:relative;justify-self:center;width:min(100%,440px)}
+.note::before{content:"";position:absolute;inset:-28px -20px auto auto;width:220px;height:220px;border-radius:50%;background:var(--gold);opacity:.9}
+.slip{position:relative;transform:rotate(-3deg);background:#fffdf8;color:#2a1a1d;border-radius:8px;padding:28px 28px 22px;border-top:12px solid var(--gold);box-shadow:0 30px 60px -20px rgba(0,0,0,.55)}
+.slip .h{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:2px solid var(--maroon);padding-bottom:10px;margin-bottom:12px}
+.slip .rx{font:700 60px/.85 Fraunces,Georgia,serif;color:var(--maroon)}
+.slip .h small{text-align:right;font-size:13px;color:#6d5a5d}
+.slip dl{margin:0;display:grid;grid-template-columns:auto minmax(0,1fr);gap:6px 12px;font-size:15px}
+.slip dt{color:#6d5a5d;font-weight:600}.slip dd{margin:0;font-weight:600}
+.slip dd.big{font:700 22px/1.15 Fraunces,Georgia,serif;color:var(--maroon)}
+.slip ul{list-style:none;padding:0;margin:14px 0 0;display:grid;gap:8px}
+.slip li{display:flex;gap:10px;align-items:center;font-size:16px}
+.slip li svg{width:22px;height:22px;flex:none}
+.slip .sg{display:flex;justify-content:space-between;align-items:end;margin-top:16px;font-size:12px;color:#6d5a5d}
+.slip .sg i{font:italic 500 30px Fraunces,Georgia,serif;color:var(--maroon)}
+@media(max-width:860px){.hero{grid-template-columns:minmax(0,1fr)}.note{width:min(100%,380px);margin-top:8px}}
+@media(max-width:600px){.note{display:none}}
 header .lead{max-width:60ch;margin:16px 0 0;color:#f1dfe2;font-size:18px}
 header ul{list-style:none;padding:0;margin:20px 0 0;display:flex;flex-wrap:wrap;gap:10px 22px;color:#fbf6ee;font-weight:600}
 header li::before{content:"";display:inline-block;width:9px;height:9px;border-radius:50%;background:var(--gold);margin-right:9px}
@@ -102,12 +119,27 @@ footer{font-size:14px;color:var(--soft)}
 </style>
 </head>
 <body>
-<header class="band"><div class="wrap">
+<header class="band"><div class="wrap hero"><div>
   <div class="brand">Build With Ada</div>
   <h1>You've spent years being the one everyone calls. It's time you got paid for it.</h1>
   <p class="lead">You can love your life and still want more freedom. If fear, money worries or the thought of being a beginner again have kept you stuck, you are not alone. In one study, 78% of women in their 40s and 50s with a business idea hadn't taken action yet. Money worries (83%), fear of failure (81%) and low confidence (78%) were the biggest reasons.</p>
   <p class="lead">The skills you've built at work, at home and in your community didn't disappear. In about 5 minutes, find out which of them could become your first paid offer, without quitting your job or starting from zero.</p>
   <ul><li>No big budget</li><li>No new degree</li><li>Keep the life you love</li></ul>
+  </div>
+  <div class="note" aria-hidden="true"><div class="slip">
+    <div class="h"><div class="rx">Rx</div><small>Build With Ada<br>Your next chapter</small></div>
+    <dl>
+      <dt>For</dt><dd>You</dd>
+      <dt>History</dt><dd>Years of skills, not yet paid for</dd>
+      <dt>Prescribe</dt><dd class="big">One paid offer, started this month</dd>
+    </dl>
+    <ul>
+      <li><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#c9a227"/><path d="M7 12.5l3.2 3.2L17 9" fill="none" stroke="#2a1a1d" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Find your paid skill</li>
+      <li><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#c9a227"/><path d="M7 12.5l3.2 3.2L17 9" fill="none" stroke="#2a1a1d" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>3 ways to earn from it</li>
+      <li><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#c9a227"/><path d="M7 12.5l3.2 3.2L17 9" fill="none" stroke="#2a1a1d" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Your first 7 days</li>
+    </ul>
+    <div class="sg"><span>Take daily. Refills unlimited.</span><i>Ada</i></div>
+  </div></div>
 </div></header>
 
 <main class="band"><div class="wrap grid">
