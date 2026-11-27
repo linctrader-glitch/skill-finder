@@ -85,6 +85,13 @@ input[type=range]{width:100%;height:44px;accent-color:var(--maroon)}
 .offer{margin:16px 0 4px;padding:16px 18px;border-left:4px solid var(--maroon2);background:var(--bg);border-radius:0 12px 12px 0}
 .offer b{display:block;font-size:14px;color:var(--soft);margin-bottom:4px}
 .offer q{font:500 20px/1.4 Fraunces,Georgia,serif;quotes:none}
+.bonus{display:flex;gap:10px;align-items:flex-start;margin:14px 0 0;padding:12px 14px;border-radius:12px;background:var(--goldsoft);font-size:16px}
+.bonus svg{width:22px;height:22px;flex:none;margin-top:2px}
+.bonus b{color:var(--maroon2)}
+.nudge{display:none;margin:0 0 16px;padding:16px;border-radius:12px;background:var(--maroon);color:#fbf6ee}
+.nudge.on{display:block}
+.nudge p{margin:0 0 12px;font-size:17px}
+.mini{display:inline-flex;align-items:center;min-height:44px;padding:10px 18px;border-radius:999px;background:var(--gold);color:#2a1a1d;font-weight:700;text-decoration:none;margin-top:10px}
 .gate{display:none;background:var(--paper);border:2px solid var(--gold);border-radius:14px;padding:24px;margin-bottom:18px}
 .gate.on{display:block}
 .gate h2{font-size:clamp(24px,3vw,30px);margin-bottom:6px}
@@ -209,14 +216,16 @@ footer{font-size:14px;color:var(--soft)}
     </section>
 
     <section class="ways" id="ways" aria-live="polite">
+      <div class="nudge" id="nudge"><p>Torn between ideas? That's normal, and it's exactly what we sort out together on the call.</p><a class="mini" id="book5" href="#">Book a call to bring it to life</a></div>
       <p class="kicker">Finally. This feels like you!</p>
       <h2 id="wtitle">3 ways to get paid for your skill</h2>
       <p class="hint" style="color:var(--soft);margin:0">These are already inside you. Read them out loud. Which one feels like you?</p>
-      <div class="offer"><b>Your first offer, drafted</b><q id="woffer"></q></div>
+      <div class="offer"><b>Your first offer, drafted</b><q id="woffer"></q><br><a class="mini" id="book4" href="#">Love this? Let's make it yours</a></div>
       <p class="hint" style="color:var(--soft);margin:12px 0 0">And 3 ways to get paid for it:</p>
       <ol id="wlist"></ol>
       <p class="bring">This is your first draft. You don't have to have it all figured out. Picking one is the easy part. Turning it into your first paying client is where I come in, and you won't do it alone.</p>
       <a class="btn gold" id="book3" href="#">Book a call to bring it to life</a>
+      <p class="bonus"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="18" height="13" rx="2"/><path d="M12 8v13M3 12h18M12 8c-2-4-6-4-6-1.5S9 8 12 8zm0 0c2-4 6-4 6-1.5S15 8 12 8z"/></svg><span><b>48-hour bonus:</b> book your call by <b id="bdate">this time in 2 days</b> and get a free 7-day check-in after your session.</span></p>
     </section>
   </div>
 
@@ -234,7 +243,7 @@ footer{font-size:14px;color:var(--soft)}
         <div class="lock"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg><div><b>Your first 7 days</b><span>Day 1 message five people you know</span></div></div>
       </div>
       <div class="cta">
-        <p>Look at what you already have. Your 3 ways to get paid are ready under step 4. Let's bring one to life together on a 1:1 call.</p>
+        <p>Your first offer and 3 ways to get paid are ready. Book within 48 hours and get a free 7-day check-in after your call.</p>
         <a class="btn gold wide" id="book" href="#">Book a call to bring it to life</a>
       </div>
       <div class="sig"><span>Rooting for you,</span><i>Ada</i></div>
@@ -297,7 +306,7 @@ let S=[
 ];
 const Q=[["enjoy","I enjoy doing this"],["proof","I've helped someone with it, even for free"],["pain","It saves people time, money or stress"],["quick","I could start this week with what I have"]];
 const L=["No","Some","Yes"];
-let roles=[],picked=[],sc={},loved=[],cR=[],cS=[],unlocked=false,fname="",aud="",cA=[];
+let roles=[],picked=[],sc={},loved=[],cR=[],cS=[],unlocked=false,fname="",aud="",cA=[],uAt=0,moved=false;
 const FIREBASE_CONFIG={
   apiKey:"AIzaSyAJkabK8TRsLrxtZsU0KFVAmeTBiL2Vsds",
   authDomain:"skillfinderleads.firebaseapp.com",
@@ -318,9 +327,9 @@ async function saveLead(doc){
 const $=id=>document.getElementById(id);
 const esc=t=>String(t).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const lab=id=>S.find(x=>x.id===id).l;
-try{const s=JSON.parse(localStorage.getItem("psf2")||"null");if(s){roles=s.roles||[];picked=s.picked||[];sc=s.sc||{};loved=s.loved||[];cR=s.cR||[];cS=s.cS||[];unlocked=!!s.unlocked;fname=s.fname||"";aud=s.aud||"";cA=s.cA||[];if(s.yrs)$("yrs").value=s.yrs;}}catch(e){}
+try{const s=JSON.parse(localStorage.getItem("psf2")||"null");if(s){roles=s.roles||[];picked=s.picked||[];sc=s.sc||{};loved=s.loved||[];cR=s.cR||[];cS=s.cS||[];unlocked=!!s.unlocked;fname=s.fname||"";aud=s.aud||"";cA=s.cA||[];uAt=s.uAt||0;moved=!!s.moved;if(s.yrs)$("yrs").value=s.yrs;}}catch(e){}
 R=R.concat(cR);S=S.concat(cS);
-function save(){try{localStorage.setItem("psf2",JSON.stringify({roles,picked,sc,loved,cR,cS,unlocked,fname,aud,cA,yrs:$("yrs").value}))}catch(e){}}
+function save(){try{localStorage.setItem("psf2",JSON.stringify({roles,picked,sc,loved,cR,cS,unlocked,fname,aud,cA,uAt,moved,yrs:$("yrs").value}))}catch(e){}}
 const clean=v=>v.replace(/\s+/g," ").trim().slice(0,40);
 const cap=v=>v.charAt(0).toUpperCase()+v.slice(1);
 $("roleForm").addEventListener("submit",e=>{e.preventDefault();const v=clean($("roleIn").value);if(!v)return;
@@ -337,6 +346,7 @@ const scored=id=>Q.every(([k])=>(sc[id]||{})[k]);
 const list=a=>a.length<2?a.join(""):a.slice(0,-1).join(", ")+" and "+a[a.length-1];
 
 function draw(){
+  if(unlocked&&draw.ran)moved=true;draw.ran=true;
   $("roles").innerHTML=R.map(r=>`<button class="chip" data-r="${r.id}" aria-pressed="${roles.includes(r.id)}">${esc(r.l)}</button>`).join("");
   const g=sug();
   $("chips").innerHTML=S.map(s=>{const on=picked.includes(s.id);
@@ -377,6 +387,8 @@ function rx(){
   if(done){const id=top[0],name=lab(id),low=name.toLowerCase();
     const ideas=W[id]||[`One-on-one help|Offer ${low} to one client at a time, in person or online.`,`Small-group class|Teach ${low} to 3 to 5 people at once.`,`Done-for-you service|Do the ${low} work for busy people who'd rather pay than do it themselves.`];
     const o=O[id],who=aud.toLowerCase();
+    $("nudge").classList.toggle("on",moved);
+    if(uAt){const d=new Date(uAt+48*3600e3);$("bdate").textContent=d.toLocaleDateString(undefined,{weekday:"long",month:"long",day:"numeric"})+" at "+d.toLocaleTimeString(undefined,{hour:"numeric",minute:"2-digit"});}
     $("woffer").textContent=o?`I help ${who} ${o[0]} ${o[1]}, so ${o[2]}.`:`I help ${who} with ${low}, so they get results without the stress.`;
     $("wtitle").textContent=(fname?fname+", here are ":"")+"3 ways to get paid for "+low;
     $("wlist").innerHTML=ideas.map(x=>{const [t,d]=x.split("|");return `<li><div><b>${esc(t)}</b>${esc(d)}</div></li>`}).join("");}
@@ -404,9 +416,9 @@ $("gateForm").addEventListener("submit",async e=>{e.preventDefault();
     roles:roles.map(r=>R.find(x=>x.id===r).l),years:+$("yrs").value,
     skills:picked.map(id=>({skill:lab(id),score:total(id)})),loved:loved.map(lab),topSkill:top.length?lab(top[0]):"",audience:aud.slice(0,50),source:"theskillfinder"};
   try{await saveLead(doc)}catch(err){console.warn("Could not save answers",err)}
-  fname=n.slice(0,60);unlocked=true;save();rx();$("fbtn").disabled=false;$("fbtn").textContent="Show my 3 ways";
+  fname=n.slice(0,60);unlocked=true;uAt=Date.now();moved=false;save();rx();$("fbtn").disabled=false;$("fbtn").textContent="Show my 3 ways";
   $("ways").scrollIntoView({behavior:"smooth",block:"start"});});
-["book","book2","book3"].forEach(i=>$(i).href=CONSULT_URL);
+["book","book2","book3","book4","book5"].forEach(i=>$(i).href=CONSULT_URL);
 draw();
 }
 </script>
