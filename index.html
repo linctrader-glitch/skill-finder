@@ -77,6 +77,16 @@ input[type=range]{width:100%;height:44px;accent-color:var(--maroon)}
 .heart{width:22px;height:22px;flex:none;fill:none;stroke:var(--maroon2);stroke-width:2}
 .love button[aria-pressed=true] .heart{fill:var(--maroon2)}
 .empty{color:var(--soft);font-style:italic;margin:0}
+.gate{display:none;background:var(--paper);border:2px solid var(--gold);border-radius:14px;padding:24px;margin-bottom:18px}
+.gate.on{display:block}
+.gate h2{font-size:clamp(24px,3vw,30px);margin-bottom:6px}
+.gate form{display:grid;gap:12px;margin-top:14px}
+.gate label{font-weight:600;font-size:15px;display:grid;gap:6px}
+.gate input[type=text],.gate input[type=email]{min-height:48px;padding:10px 14px;border-radius:10px;border:1.5px solid var(--line);background:var(--bg);color:var(--ink);font:inherit;font-size:16px}
+.gate .ok{display:flex;gap:10px;align-items:flex-start;font-weight:400}
+.gate .ok input{width:22px;height:22px;margin-top:2px;accent-color:var(--maroon);flex:none}
+.gate .fine{font-size:13px;color:var(--soft);margin:0}
+.gate .err{color:#b3261e;font-size:15px;margin:0;min-height:1em}
 .ways{display:none;background:var(--paper);border:2px solid var(--gold);border-radius:14px;padding:24px;margin-bottom:18px}
 .ways.on{display:block}
 .ways .kicker{color:var(--maroon2);font-weight:700;font-size:15px;margin:0 0 4px}
@@ -170,6 +180,19 @@ footer{font-size:14px;color:var(--soft)}
       <div class="love" id="love"><p class="empty">Score your picks first.</p></div>
     </section>
 
+    <section class="gate" id="gate">
+      <h2>Your 3 ways are ready</h2>
+      <p class="hint" style="color:var(--soft);margin:0">Tell me where to find you, and I'll show you how to get paid for what you already do.</p>
+      <form id="gateForm" novalidate>
+        <label>First name<input type="text" id="fname" autocomplete="given-name" maxlength="60" required></label>
+        <label>Email<input type="email" id="femail" autocomplete="email" maxlength="160" required></label>
+        <label class="ok"><input type="checkbox" id="fok" checked><span>Yes, send me tips and updates from Ada. I can unsubscribe anytime.</span></label>
+        <p class="err" id="ferr" role="alert"></p>
+        <button class="btn gold" type="submit" id="fbtn">Show my 3 ways</button>
+        <p class="fine">Your answers go to Ada so she can prepare if you book a call. They are never sold or shared.</p>
+      </form>
+    </section>
+
     <section class="ways" id="ways" aria-live="polite">
       <p class="kicker">Finally. This feels like you!</p>
       <h2 id="wtitle">3 ways to get paid for your skill</h2>
@@ -255,13 +278,23 @@ let S=[
 ];
 const Q=[["enjoy","I enjoy doing this"],["proof","I've helped someone with it, even for free"],["pain","It saves people time, money or stress"],["quick","I could start this week with what I have"]];
 const L=["No","Some","Yes"];
-let roles=[],picked=[],sc={},loved=[],cR=[],cS=[];
+let roles=[],picked=[],sc={},loved=[],cR=[],cS=[],unlocked=false,fname="";
+const FIREBASE_CONFIG=null; /* paste the firebaseConfig object here */
+async function saveLead(doc){
+  if(!FIREBASE_CONFIG)return false;
+  const V="10.12.2";
+  const {initializeApp}=await import(`https://www.gstatic.com/firebasejs/${V}/firebase-app.js`);
+  const {getFirestore,collection,addDoc,serverTimestamp}=await import(`https://www.gstatic.com/firebasejs/${V}/firebase-firestore.js`);
+  const db=getFirestore(initializeApp(FIREBASE_CONFIG));
+  await addDoc(collection(db,"skillFinderLeads"),{...doc,createdAt:serverTimestamp()});
+  return true;
+}
 const $=id=>document.getElementById(id);
 const esc=t=>String(t).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const lab=id=>S.find(x=>x.id===id).l;
-try{const s=JSON.parse(localStorage.getItem("psf2")||"null");if(s){roles=s.roles||[];picked=s.picked||[];sc=s.sc||{};loved=s.loved||[];cR=s.cR||[];cS=s.cS||[];if(s.yrs)$("yrs").value=s.yrs;}}catch(e){}
+try{const s=JSON.parse(localStorage.getItem("psf2")||"null");if(s){roles=s.roles||[];picked=s.picked||[];sc=s.sc||{};loved=s.loved||[];cR=s.cR||[];cS=s.cS||[];unlocked=!!s.unlocked;fname=s.fname||"";if(s.yrs)$("yrs").value=s.yrs;}}catch(e){}
 R=R.concat(cR);S=S.concat(cS);
-function save(){try{localStorage.setItem("psf2",JSON.stringify({roles,picked,sc,loved,cR,cS,yrs:$("yrs").value}))}catch(e){}}
+function save(){try{localStorage.setItem("psf2",JSON.stringify({roles,picked,sc,loved,cR,cS,unlocked,fname,yrs:$("yrs").value}))}catch(e){}}
 const clean=v=>v.replace(/\s+/g," ").trim().slice(0,40);
 const cap=v=>v.charAt(0).toUpperCase()+v.slice(1);
 $("roleForm").addEventListener("submit",e=>{e.preventDefault();const v=clean($("roleIn").value);if(!v)return;
@@ -305,11 +338,12 @@ function rx(){
     $("ralso").textContent=top.length>1?"Also strong: "+list(top.slice(1).map(lab).map(s=>s.toLowerCase()))+".":"Choose one or two more you love in step 4.";}
   else if(picked.length){$("rskill").textContent="Almost there";$("ralso").textContent="Score your picks, then choose the ones you love.";}
   else{$("rskill").textContent="Waiting for your answers";$("ralso").textContent="";}
-  r.classList.toggle("done",done);
-  const w=$("ways");w.classList.toggle("on",done);
+  r.classList.toggle("done",done&&unlocked);
+  $("gate").classList.toggle("on",done&&!unlocked);
+  const w=$("ways");w.classList.toggle("on",done&&unlocked);
   if(done){const id=top[0],name=lab(id),low=name.toLowerCase();
     const ideas=W[id]||[`One-on-one help|Offer ${low} to one client at a time, in person or online.`,`Small-group class|Teach ${low} to 3 to 5 people at once.`,`Done-for-you service|Do the ${low} work for busy people who'd rather pay than do it themselves.`];
-    $("wtitle").textContent="3 ways to get paid for "+low;
+    $("wtitle").textContent=(fname?fname+", here are ":"")+"3 ways to get paid for "+low;
     $("wlist").innerHTML=ideas.map(x=>{const [t,d]=x.split("|");return `<li><div><b>${esc(t)}</b>${esc(d)}</div></li>`}).join("");}
 }
 $("roles").addEventListener("click",e=>{const b=e.target.closest("[data-r]");if(!b)return;const id=b.dataset.r;
@@ -321,6 +355,18 @@ $("rates").addEventListener("click",e=>{const b=e.target.closest("[data-s]");if(
 $("love").addEventListener("click",e=>{const b=e.target.closest("[data-l]");if(!b)return;const id=b.dataset.l;
   loved=loved.includes(id)?loved.filter(x=>x!==id):loved.length<3?[...loved,id]:loved;draw()});
 $("yrs").addEventListener("input",()=>{rx();save()});
+$("gateForm").addEventListener("submit",async e=>{e.preventDefault();
+  const n=$("fname").value.trim(),m=$("femail").value.trim();
+  if(!n){$("ferr").textContent="Please add your first name.";return}
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(m)){$("ferr").textContent="Please check your email address.";return}
+  $("ferr").textContent="";$("fbtn").disabled=true;$("fbtn").textContent="One moment...";
+  const top=[...loved].sort((a,b)=>total(b)-total(a));
+  const doc={firstName:n.slice(0,60),email:m.slice(0,160),consent:$("fok").checked,
+    roles:roles.map(r=>R.find(x=>x.id===r).l),years:+$("yrs").value,
+    skills:picked.map(id=>({skill:lab(id),score:total(id)})),loved:loved.map(lab),topSkill:top.length?lab(top[0]):"",source:"theskillfinder"};
+  try{await saveLead(doc)}catch(err){console.warn("Could not save answers",err)}
+  fname=n.slice(0,60);unlocked=true;save();rx();$("fbtn").disabled=false;$("fbtn").textContent="Show my 3 ways";
+  $("ways").scrollIntoView({behavior:"smooth",block:"start"});});
 ["book","book2","book3"].forEach(i=>$(i).href=CONSULT_URL);
 draw();
 }
