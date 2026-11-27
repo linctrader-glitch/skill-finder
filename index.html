@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Paid Skill Finder</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+/* VOICE: warm, emotional, hopeful. A nurse who changed careers after 50, talking to a friend.
+   IDEA: a prescription pad. Her years of work become the "history"; the Rx is her next chapter.
+   PICTURE: the live Rx slip that fills as she answers, then locks the plan until her call with Ada.
+   COLOUR and TYPE: Build With Ada maroon, gold accent, cream paper. Fraunces + Source Sans 3.
+   LAYOUT: emotional maroon hero, four steps left with sticky Rx right, then the unlock band. */
+:root{color-scheme:light dark;
+--bg:light-dark(#fbf6ee,#1a1012);--paper:light-dark(#fffdf8,#24171a);--ink:light-dark(#2a1a1d,#f4ece2);
+--soft:light-dark(#6d5a5d,#c9b8b0);--line:light-dark(#e6d9c6,#3d2a2e);--maroon:#6b1e2e;--maroon2:light-dark(#6b1e2e,#e08a9a);
+--gold:#c9a227;--goldsoft:light-dark(#f5ead0,#3a2f17)}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.55 "Source Sans 3",system-ui,sans-serif;overflow-x:clip}
+h1,h2,h3,.serif{font-family:Fraunces,Georgia,serif;font-weight:700;line-height:1.08;text-wrap:balance;margin:0}
+.band{padding:clamp(28px,4vw,56px) max(5vw,16px)}
+.wrap{max-width:1180px;margin:0 auto}
+header{background:var(--maroon);color:#fbf6ee}
+header .brand{font-weight:700;color:var(--gold);font-size:15px;margin-bottom:12px}
+header h1{font-size:clamp(32px,5vw,52px);max-width:18ch}
+header .lead{max-width:60ch;margin:16px 0 0;color:#f1dfe2;font-size:18px}
+header ul{list-style:none;padding:0;margin:20px 0 0;display:flex;flex-wrap:wrap;gap:10px 22px;color:#fbf6ee;font-weight:600}
+header li::before{content:"";display:inline-block;width:9px;height:9px;border-radius:50%;background:var(--gold);margin-right:9px}
+.grid{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:clamp(20px,3vw,40px);align-items:start}
+.step{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:22px;margin-bottom:18px}
+.step h2{font-size:24px;margin-bottom:6px}.step .hint{color:var(--soft);margin:0 0 14px;font-size:16px}
+.step.off{opacity:.55}
+.num{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:50%;background:var(--maroon);color:#fff;font:700 15px "Source Sans 3";margin-right:8px;vertical-align:3px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{min-height:44px;padding:8px 14px;border-radius:999px;border:1.5px solid var(--line);background:transparent;color:var(--ink);font:inherit;font-size:16px;cursor:pointer}
+.chip.sug{border-color:var(--gold)}
+.chip[aria-pressed=true]{background:var(--maroon);border-color:var(--maroon);color:#fff}
+.chip:disabled{opacity:.4;cursor:not-allowed}
+.note{margin:12px 0 0;font-size:15px;color:var(--soft)}.note b{color:var(--ink)}
+button:focus-visible,input:focus-visible,a:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+.rowv{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-top:16px}
+.rowv label{font-weight:600}.rowv b{font:700 22px Fraunces,Georgia,serif;color:var(--maroon2);white-space:nowrap}
+input[type=range]{width:100%;height:44px;accent-color:var(--maroon)}
+.rate{border-top:1px solid var(--line);padding:14px 0}.rate:first-child{border-top:0;padding-top:0}
+.rate h3{font-size:19px;margin-bottom:8px}
+.q{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 12px;padding:5px 0}
+.q span{font-size:16px}
+.seg{display:flex;border:1.5px solid var(--line);border-radius:10px;overflow:hidden;flex:none}
+.seg button{min-width:58px;min-height:44px;border:0;background:transparent;color:var(--ink);font:inherit;font-size:15px;cursor:pointer}
+.seg button+button{border-left:1.5px solid var(--line)}
+.seg button[aria-pressed=true]{background:var(--gold);color:#2a1a1d;font-weight:700}
+.love{display:grid;gap:8px}
+.love button{display:flex;justify-content:space-between;align-items:center;gap:12px;min-height:52px;padding:10px 16px;border-radius:12px;border:1.5px solid var(--line);background:transparent;color:var(--ink);font:inherit;text-align:left;cursor:pointer}
+.love button[aria-pressed=true]{border-color:var(--maroon);background:var(--goldsoft)}
+.love small{color:var(--soft);white-space:nowrap}
+.heart{width:22px;height:22px;flex:none;fill:none;stroke:var(--maroon2);stroke-width:2}
+.love button[aria-pressed=true] .heart{fill:var(--maroon2)}
+.empty{color:var(--soft);font-style:italic;margin:0}
+.add{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+.add input{flex:1 1 220px;min-height:46px;padding:10px 14px;border-radius:10px;border:1.5px solid var(--line);background:var(--bg);color:var(--ink);font:inherit;font-size:16px}
+.add button{min-height:46px;padding:10px 20px;border-radius:10px;border:0;background:var(--maroon);color:#fff;font:700 16px "Source Sans 3",sans-serif;cursor:pointer}
+.rx{position:sticky;top:16px;background:var(--paper);border-radius:6px;padding:26px 26px 22px;
+  box-shadow:0 1px 0 var(--line),0 18px 40px -18px rgba(60,20,30,.35);border-top:10px solid var(--maroon)}
+.rx .top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;border-bottom:2px solid var(--maroon2);padding-bottom:12px;margin-bottom:6px}
+.rx .sym{font:700 54px/0.9 Fraunces,Georgia,serif;color:var(--maroon2)}
+.rx .who{text-align:right;font-size:14px;color:var(--soft)}
+.rx .lbl{font-size:14px;color:var(--soft);font-weight:600;margin-top:14px}
+.rx .hist{font:500 18px/1.45 Fraunces,Georgia,serif;margin:2px 0 0}
+.rx .skill{font:700 clamp(26px,3.2vw,36px)/1.08 Fraunces,Georgia,serif;color:var(--maroon2);margin-top:2px}
+.rx .also{font-size:16px;margin:4px 0 0}
+.locks{display:grid;gap:8px;margin-top:16px}
+.lock{display:flex;align-items:center;gap:12px;padding:11px 14px;border-radius:10px;background:var(--goldsoft)}
+.lock svg{width:20px;height:20px;flex:none;fill:none;stroke:var(--maroon2);stroke-width:2}
+.lock b{display:block;font-size:16px}
+.lock span{display:block;font-size:14px;color:var(--soft);filter:blur(4px);user-select:none}
+.rx .cta{margin-top:18px;display:none}.rx.done .cta{display:block}
+.rx .cta p{margin:0 0 12px;font-size:16px}
+.sig{margin-top:16px;display:flex;justify-content:space-between;align-items:end;gap:10px;font-size:13px;color:var(--soft)}
+.sig i{font:italic 500 22px Fraunces,Georgia,serif;color:var(--ink)}
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:50px;padding:12px 24px;border-radius:999px;border:0;font:700 17px "Source Sans 3",sans-serif;cursor:pointer;text-decoration:none;text-align:center}
+.btn.gold{background:var(--gold);color:#2a1a1d}.btn.wide{width:100%}
+.unlock{background:var(--maroon);color:#fbf6ee}
+.unlock .wrap{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:clamp(20px,4vw,48px);align-items:center}
+.unlock h2{font-size:clamp(28px,3.6vw,40px);margin-bottom:12px}
+.unlock p{color:#f1dfe2;max-width:58ch;margin:0 0 10px}
+.unlock ol{margin:0;padding-left:22px;display:grid;gap:8px;font-size:18px}
+.unlock ol b{color:var(--gold)}
+.story{font:italic 500 19px/1.5 Fraunces,Georgia,serif;color:#fbf6ee;border-left:3px solid var(--gold);padding-left:16px;margin:16px 0 18px}
+footer{font-size:14px;color:var(--soft)}
+@media(max-width:860px){.grid,.unlock .wrap{grid-template-columns:minmax(0,1fr)}.rx{position:static}}
+@media(prefers-reduced-motion:no-preference){.rx .skill,.rx .hist{transition:opacity .25s}.rx.flash .skill,.rx.flash .hist{opacity:.35}}
+</style>
+</head>
+<body>
+<header class="band"><div class="wrap">
+  <div class="brand">Build With Ada</div>
+  <h1>You've spent years being the one everyone calls. It's time you got paid for it.</h1>
+  <p class="lead">You can love your life and still want more freedom. If fear, money worries or the thought of being a beginner again have kept you stuck, you are not alone. In one study, 78% of women in their 40s and 50s with a business idea hadn't taken action yet. Money worries (83%), fear of failure (81%) and low confidence (78%) were the biggest reasons.</p>
+  <p class="lead">The skills you've built at work, at home and in your community didn't disappear. In about 5 minutes, find out which of them could become your first paid offer, without quitting your job or starting from zero.</p>
+  <ul><li>No big budget</li><li>No new degree</li><li>Keep the life you love</li></ul>
+</div></header>
+
+<main class="band"><div class="wrap grid">
+  <div>
+    <section class="step" id="s1">
+      <h2><span class="num">1</span>The work you've been doing for years</h2>
+      <p class="hint">Paid or unpaid, it all counts. Pick everything that's true for you, or type your own.</p>
+      <div class="chips" id="roles"></div>
+      <form class="add" id="roleForm"><input id="roleIn" aria-label="Your work" maxlength="40" placeholder="Something else? Type your work, like pharmacist or pastor's wife"><button type="submit">Add</button></form>
+      <div class="rowv"><label for="yrs">Years of experience, all together</label><b id="yrsv"></b></div>
+      <input type="range" id="yrs" min="5" max="40" step="1" value="20">
+    </section>
+
+    <section class="step" id="s2">
+      <h2><span class="num">2</span>What do people always ask you for?</h2>
+      <p class="hint">Pick up to 5. The ones with a gold outline often fit the work you chose.</p>
+      <div class="chips" id="chips"></div>
+      <form class="add" id="skillForm"><input id="skillIn" aria-label="Your skill" maxlength="40" placeholder="Not listed? Type what people ask you for"><button type="submit">Add</button></form>
+    </section>
+
+    <section class="step" id="s3">
+      <h2><span class="num">3</span>Score your picks</h2>
+      <p class="hint">Be honest. There are no wrong answers here.</p>
+      <div id="rates"><p class="empty">Pick at least one skill in step 2.</p></div>
+    </section>
+
+    <section class="step" id="s4">
+      <h2><span class="num">4</span>Which 2 or 3 do you love most?</h2>
+      <p class="hint">Money follows what you'll keep showing up for. Tap the ones that light you up.</p>
+      <div class="love" id="love"><p class="empty">Score your picks first.</p></div>
+    </section>
+  </div>
+
+  <aside>
+    <div class="rx" id="rx" aria-live="polite">
+      <div class="top"><div class="sym">Rx</div><div class="who">Prescribed by Ada<br>Nurse who changed careers after 50</div></div>
+      <div class="lbl">Your history</div>
+      <p class="hist" id="rhist">Tell me about the work you've been doing.</p>
+      <div class="lbl">Your strongest paid skill</div>
+      <div class="skill" id="rskill">Waiting for your answers</div>
+      <p class="also" id="ralso"></p>
+      <div class="locks">
+        <div class="lock"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg><div><b>Your first paid offer</b><span>I help busy women get results in one week</span></div></div>
+        <div class="lock"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg><div><b>Your starter price and income goal</b><span>$120 per client, 6 clients a month</span></div></div>
+        <div class="lock"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg><div><b>Your first 7 days</b><span>Day 1 message five people you know</span></div></div>
+      </div>
+      <div class="cta">
+        <p>Your prescription is ready. Let's unlock it together on a 1:1 call.</p>
+        <a class="btn gold wide" id="book" href="#">Book my call with Ada</a>
+      </div>
+      <div class="sig"><span>Refills: unlimited</span><i>Ada</i></div>
+    </div>
+  </aside>
+</div></main>
+
+<section class="band unlock" id="unlock"><div class="wrap">
+  <div>
+    <h2>Your skill is the start. Let's build your offer together.</h2>
+    <p>Knowing your skill is the first win. Turning it into money is where most women get stuck, alone, second-guessing. You don't have to figure it out by yourself.</p>
+    <p class="story">I was a nurse for years. I changed careers after 50. I know what it feels like to wonder if it's too late. It isn't.</p>
+    <a class="btn gold" id="book2" href="#">Book my call with Ada</a>
+  </div>
+  <div>
+    <p><b>On our call, we will:</b></p>
+    <ol>
+      <li><b>Talk it through.</b> Your skills, your life, what you really want.</li>
+      <li><b>Build your offer.</b> One simple offer people understand and want.</li>
+      <li><b>Set your goal.</b> Your starter price and your first income target.</li>
+      <li><b>Lay out your first 7 days.</b> Exactly who to reach and what to say.</li>
+    </ol>
+  </div>
+</div></section>
+
+<footer class="band"><div class="wrap">
+  <p>Study figures: research on women in their 40s and 50s reported by <a href="https://insidesmallbusiness.com.au/management/start-ups/fear-and-finances-holding-back-aspiring-middle-aged-female-entrepreneurs" style="color:inherit">Inside Small Business</a>.</p>
+  <p>This tool helps you explore ideas. It isn't a guarantee of income. Build With Ada.</p>
+</div></footer>
+
+<script>
+{
+const CONSULT_URL="https://stan.store/buildwithada";
+let R=[
+ {id:"nurse",l:"Nursing or healthcare",s:["care","well","admin"]},
+ {id:"teach",l:"Teaching",s:["tutor","write","event"]},
+ {id:"office",l:"Office or admin",s:["admin","resume","tech","write"]},
+ {id:"mom",l:"Raising a family",s:["home","cook","budget","event"]},
+ {id:"carer",l:"Caring for a parent",s:["care","home","cook"]},
+ {id:"sales",l:"Sales or customer service",s:["social","resume","write"]},
+ {id:"church",l:"Church or community work",s:["event","cook","care"]},
+ {id:"beauty",l:"Hair or beauty",s:["hair","social"]},
+ {id:"food",l:"Cooking or catering",s:["cook","bake","event"]},
+ {id:"money",l:"Finance or bookkeeping",s:["budget","admin"]},
+ {id:"hr",l:"HR or recruiting",s:["resume","admin","write"]},
+ {id:"biz",l:"Running a small business",s:["social","write","budget"]},
+ {id:"farm",l:"Gardening or farming",s:["garden","cook"]}
+];
+let S=[
+ {id:"home",l:"Organizing a home"},{id:"care",l:"Caregiving know-how"},{id:"cook",l:"Cooking"},
+ {id:"resume",l:"Resumes and job search"},{id:"budget",l:"Budgeting"},{id:"social",l:"Social media"},
+ {id:"well",l:"Healthy routines"},{id:"tutor",l:"Tutoring"},{id:"event",l:"Event planning"},
+ {id:"write",l:"Writing and editing"},{id:"tech",l:"Tech help"},{id:"admin",l:"Paperwork and admin"},
+ {id:"sew",l:"Sewing and alterations"},{id:"hair",l:"Hair and braiding"},{id:"bake",l:"Baking"},{id:"garden",l:"Gardening"}
+];
+const Q=[["enjoy","I enjoy doing this"],["proof","I've helped someone with it, even for free"],["pain","It saves people time, money or stress"],["quick","I could start this week with what I have"]];
+const L=["No","Some","Yes"];
+let roles=[],picked=[],sc={},loved=[],cR=[],cS=[];
+const $=id=>document.getElementById(id);
+const esc=t=>String(t).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const lab=id=>S.find(x=>x.id===id).l;
+try{const s=JSON.parse(localStorage.getItem("psf2")||"null");if(s){roles=s.roles||[];picked=s.picked||[];sc=s.sc||{};loved=s.loved||[];cR=s.cR||[];cS=s.cS||[];if(s.yrs)$("yrs").value=s.yrs;}}catch(e){}
+R=R.concat(cR);S=S.concat(cS);
+function save(){try{localStorage.setItem("psf2",JSON.stringify({roles,picked,sc,loved,cR,cS,yrs:$("yrs").value}))}catch(e){}}
+const clean=v=>v.replace(/\s+/g," ").trim().slice(0,40);
+const cap=v=>v.charAt(0).toUpperCase()+v.slice(1);
+$("roleForm").addEventListener("submit",e=>{e.preventDefault();const v=clean($("roleIn").value);if(!v)return;
+  let r=R.find(x=>x.l.toLowerCase()===v.toLowerCase());
+  if(!r){r={id:"cr"+Date.now(),l:cap(v),s:[]};R.push(r);cR.push(r);}
+  if(!roles.includes(r.id))roles.push(r.id);$("roleIn").value="";draw()});
+$("skillForm").addEventListener("submit",e=>{e.preventDefault();const v=clean($("skillIn").value);if(!v)return;
+  let s=S.find(x=>x.l.toLowerCase()===v.toLowerCase());
+  if(!s){s={id:"cs"+Date.now(),l:cap(v)};S.push(s);cS.push(s);}
+  if(!picked.includes(s.id)&&picked.length<5)picked.push(s.id);$("skillIn").value="";draw()});
+const sug=()=>new Set(roles.flatMap(r=>R.find(x=>x.id===r).s));
+const total=id=>Q.reduce((a,[k])=>a+((sc[id]||{})[k]||0),0);
+const scored=id=>Q.every(([k])=>(sc[id]||{})[k]);
+const list=a=>a.length<2?a.join(""):a.slice(0,-1).join(", ")+" and "+a[a.length-1];
+
+function draw(){
+  $("roles").innerHTML=R.map(r=>`<button class="chip" data-r="${r.id}" aria-pressed="${roles.includes(r.id)}">${esc(r.l)}</button>`).join("");
+  const g=sug();
+  $("chips").innerHTML=S.map(s=>{const on=picked.includes(s.id);
+    return `<button class="chip${g.has(s.id)&&!on?" sug":""}" data-id="${s.id}" aria-pressed="${on}" ${!on&&picked.length>=5?"disabled":""}>${esc(s.l)}</button>`}).join("");
+  $("rates").innerHTML=picked.length?picked.map(id=>`<div class="rate"><h3>${esc(lab(id))}</h3>`+Q.map(([k,t])=>`<div class="q"><span>${t}</span><div class="seg" role="group" aria-label="${t}">`+
+      L.map((n,i)=>`<button data-s="${id}" data-k="${k}" data-v="${i+1}" aria-pressed="${(sc[id]||{})[k]===i+1}">${n}</button>`).join("")+`</div></div>`).join("")+`</div>`).join("")
+    :'<p class="empty">Pick at least one skill in step 2.</p>';
+  const ready=picked.filter(scored).sort((a,b)=>total(b)-total(a));
+  loved=loved.filter(id=>ready.includes(id));
+  const heart='<svg class="heart" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg>';
+  $("love").innerHTML=ready.length?ready.map(id=>{const on=loved.includes(id);
+    return `<button data-l="${id}" aria-pressed="${on}" ${!on&&loved.length>=3?"disabled":""}><span>${esc(lab(id))}</span><small>Score ${total(id)} of 12 ${heart}</small></button>`}).join("")
+    :'<p class="empty">Score your picks first.</p>';
+  $("s3").classList.toggle("off",!picked.length);$("s4").classList.toggle("off",!ready.length);
+  rx();save();
+}
+function rx(){
+  const y=+$("yrs").value;$("yrsv").textContent=y+" years";
+  $("rhist").textContent=roles.length
+    ?`${y} years of ${list(roles.map(r=>R.find(x=>x.id===r).l.toLowerCase()))}. That experience is worth something.`
+    :"Tell me about the work you've been doing.";
+  const top=[...loved].sort((a,b)=>total(b)-total(a)||((sc[b]||{}).quick||0)-((sc[a]||{}).quick||0));
+  const done=top.length>=2;
+  const r=$("rx");r.classList.add("flash");setTimeout(()=>r.classList.remove("flash"),180);
+  if(top.length){$("rskill").textContent=lab(top[0]);
+    $("ralso").textContent=top.length>1?"Also strong: "+list(top.slice(1).map(lab).map(s=>s.toLowerCase()))+".":"Pick one or two more you love in step 4.";}
+  else if(picked.length){$("rskill").textContent="Almost there";$("ralso").textContent="Score your picks, then choose the ones you love.";}
+  else{$("rskill").textContent="Waiting for your answers";$("ralso").textContent="";}
+  r.classList.toggle("done",done);
+}
+$("roles").addEventListener("click",e=>{const b=e.target.closest("[data-r]");if(!b)return;const id=b.dataset.r;
+  roles=roles.includes(id)?roles.filter(x=>x!==id):[...roles,id];draw()});
+$("chips").addEventListener("click",e=>{const b=e.target.closest("[data-id]");if(!b)return;const id=b.dataset.id;
+  picked=picked.includes(id)?picked.filter(x=>x!==id):picked.length<5?[...picked,id]:picked;draw()});
+$("rates").addEventListener("click",e=>{const b=e.target.closest("[data-s]");if(!b)return;
+  sc[b.dataset.s]=sc[b.dataset.s]||{};sc[b.dataset.s][b.dataset.k]=+b.dataset.v;draw()});
+$("love").addEventListener("click",e=>{const b=e.target.closest("[data-l]");if(!b)return;const id=b.dataset.l;
+  loved=loved.includes(id)?loved.filter(x=>x!==id):loved.length<3?[...loved,id]:loved;draw()});
+$("yrs").addEventListener("input",()=>{rx();save()});
+["book","book2"].forEach(i=>$(i).href=CONSULT_URL);
+draw();
+}
+</script>
+</body>
+</html>
