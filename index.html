@@ -81,6 +81,10 @@ input[type=range]{width:100%;height:44px;accent-color:var(--maroon)}
 .heart{width:22px;height:22px;flex:none;fill:none;stroke:var(--maroon2);stroke-width:2}
 .love button[aria-pressed=true] .heart{fill:var(--maroon2)}
 .empty{color:var(--soft);font-style:italic;margin:0}
+.aud{display:none}.aud.on{display:block}
+.offer{margin:16px 0 4px;padding:16px 18px;border-left:4px solid var(--maroon2);background:var(--bg);border-radius:0 12px 12px 0}
+.offer b{display:block;font-size:14px;color:var(--soft);margin-bottom:4px}
+.offer q{font:500 20px/1.4 Fraunces,Georgia,serif;quotes:none}
 .gate{display:none;background:var(--paper);border:2px solid var(--gold);border-radius:14px;padding:24px;margin-bottom:18px}
 .gate.on{display:block}
 .gate h2{font-size:clamp(24px,3vw,30px);margin-bottom:6px}
@@ -184,6 +188,13 @@ footer{font-size:14px;color:var(--soft)}
       <div class="love" id="love"><p class="empty">Score your picks first.</p></div>
     </section>
 
+    <section class="step aud" id="s5">
+      <h2><span class="num">5</span>Who would you love to help?</h2>
+      <p class="hint">Picture the person you'd be proud to help with your expertise. Pick one, or type your own.</p>
+      <div class="chips" id="auds"></div>
+      <form class="add" id="audForm"><input id="audIn" aria-label="Who you want to help" maxlength="50" placeholder="Someone else? Like new nurses or church members"><button type="submit">Add</button></form>
+    </section>
+
     <section class="gate" id="gate">
       <h2>Your 3 ways are ready</h2>
       <p class="hint" style="color:var(--soft);margin:0">Tell me where to find you, and I'll show you how to get paid for what you already do.</p>
@@ -201,8 +212,10 @@ footer{font-size:14px;color:var(--soft)}
       <p class="kicker">Finally. This feels like you!</p>
       <h2 id="wtitle">3 ways to get paid for your skill</h2>
       <p class="hint" style="color:var(--soft);margin:0">These are already inside you. Read them out loud. Which one feels like you?</p>
+      <div class="offer"><b>Your first offer, drafted</b><q id="woffer"></q></div>
+      <p class="hint" style="color:var(--soft);margin:12px 0 0">And 3 ways to get paid for it:</p>
       <ol id="wlist"></ol>
-      <p class="bring">You don't have to have it all figured out. Picking one is the easy part. Turning it into your first paying client is where I come in, and you won't do it alone.</p>
+      <p class="bring">This is your first draft. You don't have to have it all figured out. Picking one is the easy part. Turning it into your first paying client is where I come in, and you won't do it alone.</p>
       <a class="btn gold" id="book3" href="#">Book a call to bring it to life</a>
     </section>
   </div>
@@ -216,7 +229,7 @@ footer{font-size:14px;color:var(--soft)}
       <div class="skill" id="rskill">Waiting for your answers</div>
       <p class="also" id="ralso"></p>
       <div class="locks">
-        <div class="lock"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg><div><b>Your offer, shaped to your life</b><span>I help busy women get results in one week</span></div></div>
+        <div class="lock"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg><div><b>Your offer, in your own words</b><span>I help busy women get results in one week</span></div></div>
         <div class="lock"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg><div><b>Your starter price and income goal</b><span>$120 per client, 6 clients a month</span></div></div>
         <div class="lock"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg><div><b>Your first 7 days</b><span>Day 1 message five people you know</span></div></div>
       </div>
@@ -272,6 +285,8 @@ let R=[
  {id:"biz",l:"Running a small business",s:["social","write","budget"]},
  {id:"farm",l:"Gardening or farming",s:["garden","cook"]}
 ];
+const O={"home": ["clear one cluttered room", "in a single 3-hour session", "they can breathe at home again"], "care": ["set up a simple care plan for an aging parent", "in two calls", "they stop feeling lost"], "cook": ["prep a week of healthy dinners", "in one Sunday session", "weeknights stop being chaos"], "resume": ["rewrite their resume and LinkedIn", "in one week", "they apply with confidence again"], "budget": ["build a monthly budget", "in one 90-minute call", "they stop worrying about money"], "social": ["plan a month of social media posts", "in one working session", "they show up online every week"], "well": ["build a simple daily wellness routine", "in three coaching calls", "they feel more energy and less overwhelm"], "tutor": ["help their child catch up in math or reading", "in four weekly sessions", "their child feels confident in class"], "event": ["plan a birthday or small celebration", "in two weeks", "they enjoy the day instead of running it"], "write": ["polish their website words and bio", "in one week", "they sound as professional as they are"], "tech": ["set up their phone, apps and video calls", "in one 2-hour visit", "they stay connected with family"], "admin": ["organize their inbox, calendar and files", "in one 2-hour session", "they feel in control of their week"], "sew": ["tailor and repair clothes they already own", "within a week", "they love what's already in their closet"], "hair": ["get a neat, long-lasting style", "in one appointment", "they look good without the salon wait"], "bake": ["get a custom cake for their celebration", "with one simple order", "the party has a showpiece"], "garden": ["start a small vegetable garden", "in one weekend", "they grow some of their own food"]};
+const AUD=["Busy moms", "Women over 40", "Older adults", "Families", "Small business owners", "Busy professionals", "Newcomers to the country", "Parents of school-age kids"];
 const W={"home": ["One-room reset|Clear one cluttered room in a single session for a busy mom.", "Move-in or downsizing help|Unpack and set up a new home, or help an older parent downsize.", "Virtual declutter coaching|Guide women room by room over video calls."], "care": ["Care plan setup|Help a family build a simple plan for an aging parent in two calls.", "Appointment companion|Go with older adults to doctor visits and take notes for the family.", "Caregiver support circle|Run a small monthly paid group for women caring for a parent."], "cook": ["Sunday meal prep|Cook a week of healthy dinners in a client's kitchen.", "Cooking class|Teach a small group to make 3 easy family meals.", "Small-event catering|Cook for birthdays, showers and holiday gatherings."], "resume": ["Resume refresh|Rewrite resumes for women returning to work or changing careers.", "LinkedIn makeover|Fix someone's profile in one session so recruiters notice them.", "Interview practice|Run mock interviews before a big interview."], "budget": ["Family budget setup|Build a monthly budget with a couple in one 90-minute call.", "Spending reset|Help someone find where their money goes and cut what they don't need.", "Money check-in club|A monthly call that keeps clients on track."], "social": ["Post planning|Plan a month of posts for a local small business.", "Profile makeover|Fix a business's bio, photos and highlights in one session.", "Page management|Run one business's social media a few hours a week."], "well": ["Routine coaching|Help women over 40 build a simple daily wellness routine in 3 calls.", "Walking group|Lead a paid weekly walking and wellness group.", "Healthy habits workshop|Teach a session at a church, gym or workplace."], "tutor": ["Weekly tutoring|Help a child catch up in math or reading.", "Homework club|Run a small after-school group in your home or online.", "Test prep sprint|Coach students in the weeks before a big exam."], "event": ["Celebration planning|Plan birthdays and small parties from start to finish.", "Day-of coordinator|Run the day so the family can enjoy it.", "Community events|Plan church, school or neighbourhood events."], "write": ["Website words|Polish a small business's website text and bio.", "Editing|Edit newsletters, applications or a first book.", "Monthly content|Write posts or emails for a business each month."], "tech": ["Phone setup visits|Set up phones and apps for older adults at home.", "Tech class|Teach a small group at a library, church or seniors' centre.", "Family video calls|Get grandparents set up to see family online."], "admin": ["Inbox and calendar reset|Clean up a busy professional's email and schedule in one session.", "Virtual assistant|Offer a few hours a week of remote admin help.", "Family paperwork|Organize bills, files and records for a household."], "sew": ["Alterations from home|Hem, tailor and repair clothes people already own.", "Sewing class|Teach beginners in a small group.", "Custom pieces|Make aprons, tote bags or kids' clothes to order."], "hair": ["Home appointments|Offer styling or braiding from home or at clients' homes.", "Back-to-school braids|Do kids' hair before school terms and holidays.", "Hair care class|Teach mothers how to care for their children's hair."], "bake": ["Custom cakes|Take orders for birthday and celebration cakes.", "Weekly bakes|Supply baked goods to an office or a local market.", "Baking class|Teach kids or adults to bake in a small group."], "garden": ["Garden starter|Set up a small vegetable garden for a homeowner in one weekend.", "Seasonal care|Offer regular visits to keep gardens healthy.", "Beginner workshop|Teach a small group to grow their own food."]};
 let S=[
  {id:"home",l:"Organizing a home"},{id:"care",l:"Caregiving know-how"},{id:"cook",l:"Cooking"},
@@ -282,7 +297,7 @@ let S=[
 ];
 const Q=[["enjoy","I enjoy doing this"],["proof","I've helped someone with it, even for free"],["pain","It saves people time, money or stress"],["quick","I could start this week with what I have"]];
 const L=["No","Some","Yes"];
-let roles=[],picked=[],sc={},loved=[],cR=[],cS=[],unlocked=false,fname="";
+let roles=[],picked=[],sc={},loved=[],cR=[],cS=[],unlocked=false,fname="",aud="",cA=[];
 const FIREBASE_CONFIG={
   apiKey:"AIzaSyAJkabK8TRsLrxtZsU0KFVAmeTBiL2Vsds",
   authDomain:"skillfinderleads.firebaseapp.com",
@@ -303,9 +318,9 @@ async function saveLead(doc){
 const $=id=>document.getElementById(id);
 const esc=t=>String(t).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const lab=id=>S.find(x=>x.id===id).l;
-try{const s=JSON.parse(localStorage.getItem("psf2")||"null");if(s){roles=s.roles||[];picked=s.picked||[];sc=s.sc||{};loved=s.loved||[];cR=s.cR||[];cS=s.cS||[];unlocked=!!s.unlocked;fname=s.fname||"";if(s.yrs)$("yrs").value=s.yrs;}}catch(e){}
+try{const s=JSON.parse(localStorage.getItem("psf2")||"null");if(s){roles=s.roles||[];picked=s.picked||[];sc=s.sc||{};loved=s.loved||[];cR=s.cR||[];cS=s.cS||[];unlocked=!!s.unlocked;fname=s.fname||"";aud=s.aud||"";cA=s.cA||[];if(s.yrs)$("yrs").value=s.yrs;}}catch(e){}
 R=R.concat(cR);S=S.concat(cS);
-function save(){try{localStorage.setItem("psf2",JSON.stringify({roles,picked,sc,loved,cR,cS,unlocked,fname,yrs:$("yrs").value}))}catch(e){}}
+function save(){try{localStorage.setItem("psf2",JSON.stringify({roles,picked,sc,loved,cR,cS,unlocked,fname,aud,cA,yrs:$("yrs").value}))}catch(e){}}
 const clean=v=>v.replace(/\s+/g," ").trim().slice(0,40);
 const cap=v=>v.charAt(0).toUpperCase()+v.slice(1);
 $("roleForm").addEventListener("submit",e=>{e.preventDefault();const v=clean($("roleIn").value);if(!v)return;
@@ -335,6 +350,7 @@ function draw(){
   $("love").innerHTML=ready.length?ready.map(id=>{const on=loved.includes(id);
     return `<button data-l="${id}" aria-pressed="${on}" ${!on&&loved.length>=3?"disabled":""}><span>${esc(lab(id))}</span><small>Score ${total(id)} of 12</small><span class="lv">${heart}${on?"Loved":"Tap to love"}</span></button>`}).join("")
     :'<p class="empty">Score your picks first.</p>';
+  $("auds").innerHTML=AUD.concat(cA).map(a=>`<button class="chip" data-a="${esc(a)}" aria-pressed="${a===aud}">${esc(a)}</button>`).join("");
   rx();save();
 }
 function rx(){
@@ -354,11 +370,14 @@ function rx(){
     $("ralso").textContent=(loved.length?"One more! Tap the heart on another favourite in step 4 to unlock your 3 ways to get paid.":"Now tap the hearts on your 2 favourites in step 4 to unlock your 3 ways to get paid.");}
   else if(picked.length){$("rskill").textContent="Almost there";$("ralso").textContent="Score your picks, then choose the ones you love.";}
   else{$("rskill").textContent="Waiting for your answers";$("ralso").textContent="";}
-  r.classList.toggle("done",done&&unlocked);
-  $("gate").classList.toggle("on",done&&!unlocked);
-  const w=$("ways");w.classList.toggle("on",done&&unlocked);
+  $("s5").classList.toggle("on",done);
+  $("gate").classList.toggle("on",done&&!!aud&&!unlocked);
+  const w=$("ways");w.classList.toggle("on",done&&!!aud&&unlocked);
+  r.classList.toggle("done",done&&!!aud&&unlocked);
   if(done){const id=top[0],name=lab(id),low=name.toLowerCase();
     const ideas=W[id]||[`One-on-one help|Offer ${low} to one client at a time, in person or online.`,`Small-group class|Teach ${low} to 3 to 5 people at once.`,`Done-for-you service|Do the ${low} work for busy people who'd rather pay than do it themselves.`];
+    const o=O[id],who=aud.toLowerCase();
+    $("woffer").textContent=o?`I help ${who} ${o[0]} ${o[1]}, so ${o[2]}.`:`I help ${who} with ${low}, so they get results without the stress.`;
     $("wtitle").textContent=(fname?fname+", here are ":"")+"3 ways to get paid for "+low;
     $("wlist").innerHTML=ideas.map(x=>{const [t,d]=x.split("|");return `<li><div><b>${esc(t)}</b>${esc(d)}</div></li>`}).join("");}
 }
@@ -371,6 +390,10 @@ $("rates").addEventListener("click",e=>{const b=e.target.closest("[data-s]");if(
 $("love").addEventListener("click",e=>{const b=e.target.closest("[data-l]");if(!b)return;const id=b.dataset.l;
   loved=loved.includes(id)?loved.filter(x=>x!==id):loved.length<3?[...loved,id]:loved;draw()});
 $("yrs").addEventListener("input",()=>{rx();save()});
+$("auds").addEventListener("click",e=>{const b=e.target.closest("[data-a]");if(!b)return;aud=b.dataset.a;draw();
+  if(!unlocked)$("gate").scrollIntoView({behavior:"smooth",block:"center"});});
+$("audForm").addEventListener("submit",e=>{e.preventDefault();const v=clean($("audIn").value);if(!v)return;
+  const ex=AUD.concat(cA).find(x=>x.toLowerCase()===v.toLowerCase());const val=ex||cap(v);if(!ex)cA.push(val);aud=val;$("audIn").value="";draw();});
 $("gateForm").addEventListener("submit",async e=>{e.preventDefault();
   const n=$("fname").value.trim(),m=$("femail").value.trim();
   if(!n){$("ferr").textContent="Please add your first name.";return}
@@ -379,7 +402,7 @@ $("gateForm").addEventListener("submit",async e=>{e.preventDefault();
   const top=[...loved].sort((a,b)=>total(b)-total(a));
   const doc={firstName:n.slice(0,60),email:m.slice(0,160),consent:$("fok").checked,
     roles:roles.map(r=>R.find(x=>x.id===r).l),years:+$("yrs").value,
-    skills:picked.map(id=>({skill:lab(id),score:total(id)})),loved:loved.map(lab),topSkill:top.length?lab(top[0]):"",source:"theskillfinder"};
+    skills:picked.map(id=>({skill:lab(id),score:total(id)})),loved:loved.map(lab),topSkill:top.length?lab(top[0]):"",audience:aud.slice(0,50),source:"theskillfinder"};
   try{await saveLead(doc)}catch(err){console.warn("Could not save answers",err)}
   fname=n.slice(0,60);unlocked=true;save();rx();$("fbtn").disabled=false;$("fbtn").textContent="Show my 3 ways";
   $("ways").scrollIntoView({behavior:"smooth",block:"start"});});
