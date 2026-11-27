@@ -58,6 +58,15 @@ input[type=range]{width:100%;height:44px;accent-color:var(--maroon)}
 .heart{width:22px;height:22px;flex:none;fill:none;stroke:var(--maroon2);stroke-width:2}
 .love button[aria-pressed=true] .heart{fill:var(--maroon2)}
 .empty{color:var(--soft);font-style:italic;margin:0}
+.ways{display:none;background:var(--paper);border:2px solid var(--gold);border-radius:14px;padding:24px;margin-bottom:18px}
+.ways.on{display:block}
+.ways .kicker{color:var(--maroon2);font-weight:700;font-size:15px;margin:0 0 4px}
+.ways h2{font-size:clamp(24px,3vw,30px);margin-bottom:6px}
+.ways ol{list-style:none;padding:0;margin:16px 0 0;display:grid;gap:12px;counter-reset:w}
+.ways li{counter-increment:w;display:grid;grid-template-columns:40px minmax(0,1fr);gap:12px;align-items:start;padding:14px;border-radius:12px;background:var(--goldsoft)}
+.ways li::before{content:counter(w);display:grid;place-items:center;width:36px;height:36px;border-radius:50%;background:var(--maroon);color:#fff;font:700 17px Fraunces,Georgia,serif}
+.ways li b{display:block;font:700 19px/1.2 Fraunces,Georgia,serif;margin-bottom:2px}
+.ways .bring{margin:18px 0 12px;font-size:17px}
 .add{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
 .add input{flex:1 1 220px;min-height:46px;padding:10px 14px;border-radius:10px;border:1.5px solid var(--line);background:var(--bg);color:var(--ink);font:inherit;font-size:16px}
 .add button{min-height:46px;padding:10px 20px;border-radius:10px;border:0;background:var(--maroon);color:#fff;font:700 16px "Source Sans 3",sans-serif;cursor:pointer}
@@ -131,6 +140,15 @@ footer{font-size:14px;color:var(--soft)}
       <p class="hint">Money follows what you'll keep showing up for. Tap the ones that light you up.</p>
       <div class="love" id="love"><p class="empty">Score your picks first.</p></div>
     </section>
+
+    <section class="ways" id="ways" aria-live="polite">
+      <p class="kicker">Your quick win</p>
+      <h2 id="wtitle">3 ways to get paid for your skill</h2>
+      <p class="hint" style="color:var(--soft);margin:0">Read them out loud. Which one feels like you?</p>
+      <ol id="wlist"></ol>
+      <p class="bring">Picking one is the easy part. Turning it into your first paying client is where I come in. Let's bring it to life together.</p>
+      <a class="btn gold" id="book3" href="#">Book a call to bring it to life</a>
+    </section>
   </div>
 
   <aside>
@@ -142,13 +160,13 @@ footer{font-size:14px;color:var(--soft)}
       <div class="skill" id="rskill">Waiting for your answers</div>
       <p class="also" id="ralso"></p>
       <div class="locks">
-        <div class="lock"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg><div><b>Your first paid offer</b><span>I help busy women get results in one week</span></div></div>
+        <div class="lock"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg><div><b>Your offer, shaped to your life</b><span>I help busy women get results in one week</span></div></div>
         <div class="lock"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg><div><b>Your starter price and income goal</b><span>$120 per client, 6 clients a month</span></div></div>
         <div class="lock"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg><div><b>Your first 7 days</b><span>Day 1 message five people you know</span></div></div>
       </div>
       <div class="cta">
-        <p>Your prescription is ready. Let's unlock it together on a 1:1 call.</p>
-        <a class="btn gold wide" id="book" href="#">Book my call with Ada</a>
+        <p>Your 3 ways to get paid are ready under step 4. Pick one, and let's bring it to life together on a 1:1 call.</p>
+        <a class="btn gold wide" id="book" href="#">Book a call to bring it to life</a>
       </div>
       <div class="sig"><span>Refills: unlimited</span><i>Ada</i></div>
     </div>
@@ -157,15 +175,16 @@ footer{font-size:14px;color:var(--soft)}
 
 <section class="band unlock" id="unlock"><div class="wrap">
   <div>
-    <h2>Your skill is the start. Let's build your offer together.</h2>
-    <p>Knowing your skill is the first win. Turning it into money is where most women get stuck, alone, second-guessing. You don't have to figure it out by yourself.</p>
+    <h2>You have your ideas. Let's bring one to life.</h2>
+    <p>Knowing your skill and your options is a real win. Turning one of them into money is where most women get stuck, alone and second-guessing. You don't have to figure it out by yourself.</p>
     <p class="story">I was a nurse for years. I changed careers after 50. I know what it feels like to wonder if it's too late. It isn't.</p>
-    <a class="btn gold" id="book2" href="#">Book my call with Ada</a>
+    <a class="btn gold" id="book2" href="#">Book a call to bring it to life</a>
   </div>
   <div>
     <p><b>On our call, we will:</b></p>
     <ol>
       <li><b>Talk it through.</b> Your skills, your life, what you really want.</li>
+      <li><b>Choose your way in.</b> Which of your 3 ideas fits your time and your life.</li>
       <li><b>Build your offer.</b> One simple offer people understand and want.</li>
       <li><b>Set your goal.</b> Your starter price and your first income target.</li>
       <li><b>Lay out your first 7 days.</b> Exactly who to reach and what to say.</li>
@@ -196,6 +215,7 @@ let R=[
  {id:"biz",l:"Running a small business",s:["social","write","budget"]},
  {id:"farm",l:"Gardening or farming",s:["garden","cook"]}
 ];
+const W={"home": ["One-room reset|Clear one cluttered room in a single session for a busy mom.", "Move-in or downsizing help|Unpack and set up a new home, or help an older parent downsize.", "Virtual declutter coaching|Guide women room by room over video calls."], "care": ["Care plan setup|Help a family build a simple plan for an aging parent in two calls.", "Appointment companion|Go with older adults to doctor visits and take notes for the family.", "Caregiver support circle|Run a small monthly paid group for women caring for a parent."], "cook": ["Sunday meal prep|Cook a week of healthy dinners in a client's kitchen.", "Cooking class|Teach a small group to make 3 easy family meals.", "Small-event catering|Cook for birthdays, showers and holiday gatherings."], "resume": ["Resume refresh|Rewrite resumes for women returning to work or changing careers.", "LinkedIn makeover|Fix someone's profile in one session so recruiters notice them.", "Interview practice|Run mock interviews before a big interview."], "budget": ["Family budget setup|Build a monthly budget with a couple in one 90-minute call.", "Spending reset|Help someone find where their money goes and cut what they don't need.", "Money check-in club|A monthly call that keeps clients on track."], "social": ["Post planning|Plan a month of posts for a local small business.", "Profile makeover|Fix a business's bio, photos and highlights in one session.", "Page management|Run one business's social media a few hours a week."], "well": ["Routine coaching|Help women over 40 build a simple daily wellness routine in 3 calls.", "Walking group|Lead a paid weekly walking and wellness group.", "Healthy habits workshop|Teach a session at a church, gym or workplace."], "tutor": ["Weekly tutoring|Help a child catch up in math or reading.", "Homework club|Run a small after-school group in your home or online.", "Test prep sprint|Coach students in the weeks before a big exam."], "event": ["Celebration planning|Plan birthdays and small parties from start to finish.", "Day-of coordinator|Run the day so the family can enjoy it.", "Community events|Plan church, school or neighbourhood events."], "write": ["Website words|Polish a small business's website text and bio.", "Editing|Edit newsletters, applications or a first book.", "Monthly content|Write posts or emails for a business each month."], "tech": ["Phone setup visits|Set up phones and apps for older adults at home.", "Tech class|Teach a small group at a library, church or seniors' centre.", "Family video calls|Get grandparents set up to see family online."], "admin": ["Inbox and calendar reset|Clean up a busy professional's email and schedule in one session.", "Virtual assistant|Offer a few hours a week of remote admin help.", "Family paperwork|Organize bills, files and records for a household."], "sew": ["Alterations from home|Hem, tailor and repair clothes people already own.", "Sewing class|Teach beginners in a small group.", "Custom pieces|Make aprons, tote bags or kids' clothes to order."], "hair": ["Home appointments|Offer styling or braiding from home or at clients' homes.", "Back-to-school braids|Do kids' hair before school terms and holidays.", "Hair care class|Teach mothers how to care for their children's hair."], "bake": ["Custom cakes|Take orders for birthday and celebration cakes.", "Weekly bakes|Supply baked goods to an office or a local market.", "Baking class|Teach kids or adults to bake in a small group."], "garden": ["Garden starter|Set up a small vegetable garden for a homeowner in one weekend.", "Seasonal care|Offer regular visits to keep gardens healthy.", "Beginner workshop|Teach a small group to grow their own food."]};
 let S=[
  {id:"home",l:"Organizing a home"},{id:"care",l:"Caregiving know-how"},{id:"cook",l:"Cooking"},
  {id:"resume",l:"Resumes and job search"},{id:"budget",l:"Budgeting"},{id:"social",l:"Social media"},
@@ -257,6 +277,11 @@ function rx(){
   else if(picked.length){$("rskill").textContent="Almost there";$("ralso").textContent="Score your picks, then choose the ones you love.";}
   else{$("rskill").textContent="Waiting for your answers";$("ralso").textContent="";}
   r.classList.toggle("done",done);
+  const w=$("ways");w.classList.toggle("on",done);
+  if(done){const id=top[0],name=lab(id),low=name.toLowerCase();
+    const ideas=W[id]||[`One-on-one help|Offer ${low} to one client at a time, in person or online.`,`Small-group class|Teach ${low} to 3 to 5 people at once.`,`Done-for-you service|Do the ${low} work for busy people who'd rather pay than do it themselves.`];
+    $("wtitle").textContent="3 ways to get paid for "+low;
+    $("wlist").innerHTML=ideas.map(x=>{const [t,d]=x.split("|");return `<li><div><b>${esc(t)}</b>${esc(d)}</div></li>`}).join("");}
 }
 $("roles").addEventListener("click",e=>{const b=e.target.closest("[data-r]");if(!b)return;const id=b.dataset.r;
   roles=roles.includes(id)?roles.filter(x=>x!==id):[...roles,id];draw()});
@@ -267,7 +292,7 @@ $("rates").addEventListener("click",e=>{const b=e.target.closest("[data-s]");if(
 $("love").addEventListener("click",e=>{const b=e.target.closest("[data-l]");if(!b)return;const id=b.dataset.l;
   loved=loved.includes(id)?loved.filter(x=>x!==id):loved.length<3?[...loved,id]:loved;draw()});
 $("yrs").addEventListener("input",()=>{rx();save()});
-["book","book2"].forEach(i=>$(i).href=CONSULT_URL);
+["book","book2","book3"].forEach(i=>$(i).href=CONSULT_URL);
 draw();
 }
 </script>
