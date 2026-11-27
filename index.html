@@ -30,7 +30,7 @@ header h1{font-size:clamp(32px,5vw,52px);max-width:18ch}
 .note::before{content:"";position:absolute;inset:-28px -20px auto auto;width:220px;height:220px;border-radius:50%;background:var(--gold);opacity:.9}
 .slip{position:relative;transform:rotate(-3deg);background:#fffdf8;color:#2a1a1d;border-radius:8px;padding:28px 28px 22px;border-top:12px solid var(--gold);box-shadow:0 30px 60px -20px rgba(0,0,0,.55)}
 .slip .h{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:2px solid var(--maroon);padding-bottom:10px;margin-bottom:12px}
-.slip .rx{font:700 30px/1.05 Fraunces,Georgia,serif;color:var(--maroon);max-width:9ch}
+.slip .ttl{font:700 30px/1.05 Fraunces,Georgia,serif;color:var(--maroon);max-width:9ch}
 .slip .h small{text-align:right;font-size:13px;color:#6d5a5d}
 .slip .lede{font:700 28px/1.12 Fraunces,Georgia,serif;color:var(--maroon);margin:4px 0 10px;text-wrap:balance}
 .slip .sub{margin:0;font-size:17px;line-height:1.5}
@@ -45,6 +45,7 @@ header h1{font-size:clamp(32px,5vw,52px);max-width:18ch}
 @media(max-width:860px){.hero{grid-template-columns:minmax(0,1fr)}.note{width:min(100%,380px);margin-top:8px}}
 @media(max-width:600px){.note{display:none}}
 header .lead{max-width:60ch;margin:16px 0 0;color:#f1dfe2;font-size:18px}
+header .stat{margin:14px 0 0;font-weight:700;color:var(--gold);font-size:18px;max-width:52ch}
 header ul{list-style:none;padding:0;margin:20px 0 0;display:flex;flex-wrap:wrap;gap:10px 22px;color:#fbf6ee;font-weight:600}
 header li::before{content:"";display:inline-block;width:9px;height:9px;border-radius:50%;background:var(--gold);margin-right:9px}
 .grid{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:clamp(20px,3vw,40px);align-items:start}
@@ -124,14 +125,13 @@ footer{font-size:14px;color:var(--soft)}
 <header class="band"><div class="wrap hero"><div>
   <div class="brand">Build With Ada</div>
   <h1>You've spent years being the one everyone calls. It's time you got paid for it.</h1>
-  <p class="lead">You can love your life and still want more freedom. If fear, money worries or the thought of being a beginner again have kept you stuck, you are not alone. In one study, 78% of women in their 40s and 50s with a business idea hadn't taken action yet. Money worries (83%), fear of failure (81%) and low confidence (78%) were the biggest reasons.</p>
-  <p class="lead">The skills you've built at work, at home and in your community didn't disappear. In about 5 minutes, find out which of them could become your first paid offer, without quitting your job or starting from zero.</p>
+  <p class="lead">You can love your life and still want more freedom. In 5 minutes, find the skill you could get paid for, without quitting your job.</p>
+  <p class="stat">78% of women in their 40s and 50s with a business idea haven't started yet. You can.</p>
   <ul><li>No big budget</li><li>No new degree</li><li>Keep the life you love</li></ul>
   </div>
   <div class="note" aria-hidden="true"><div class="slip">
-    <div class="h"><div class="rx">Your next chapter</div><small>Build With Ada</small></div>
+    <div class="h"><div class="ttl">Your next chapter</div></div>
     <p class="lede">Finally, something that feels like you.</p>
-    <p class="sub">Find the skill you already have and explore three ways to earn from it, on your terms.</p>
     <div class="sg"><span>Rooting for you,</span><i>Ada</i></div>
   </div></div>
 </div></header>
