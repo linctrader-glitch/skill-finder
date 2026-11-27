@@ -73,7 +73,11 @@ input[type=range]{width:100%;height:44px;accent-color:var(--maroon)}
 .love{display:grid;gap:8px}
 .love button{display:flex;justify-content:space-between;align-items:center;gap:12px;min-height:52px;padding:10px 16px;border-radius:12px;border:1.5px solid var(--line);background:transparent;color:var(--ink);font:inherit;text-align:left;cursor:pointer}
 .love button[aria-pressed=true]{border-color:var(--maroon);background:var(--goldsoft)}
-.love small{color:var(--soft);white-space:nowrap}
+.love small{color:var(--soft);white-space:nowrap;margin-left:auto}
+.love .lv{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:999px;border:1.5px solid var(--maroon2);color:var(--maroon2);font-weight:700;font-size:15px;white-space:nowrap}
+.love button[aria-pressed=true] .lv{background:var(--maroon);border-color:var(--maroon);color:#fff}
+.love button[aria-pressed=true] .lv .heart{fill:#fff;stroke:#fff}
+.love button{flex-wrap:wrap}
 .heart{width:22px;height:22px;flex:none;fill:none;stroke:var(--maroon2);stroke-width:2}
 .love button[aria-pressed=true] .heart{fill:var(--maroon2)}
 .empty{color:var(--soft);font-style:italic;margin:0}
@@ -329,7 +333,7 @@ function draw(){
   loved=loved.filter(id=>ready.includes(id));
   const heart='<svg class="heart" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg>';
   $("love").innerHTML=ready.length?ready.map(id=>{const on=loved.includes(id);
-    return `<button data-l="${id}" aria-pressed="${on}" ${!on&&loved.length>=3?"disabled":""}><span>${esc(lab(id))}</span><small>Score ${total(id)} of 12 ${heart}</small></button>`}).join("")
+    return `<button data-l="${id}" aria-pressed="${on}" ${!on&&loved.length>=3?"disabled":""}><span>${esc(lab(id))}</span><small>Score ${total(id)} of 12</small><span class="lv">${heart}${on?"Loved":"Tap to love"}</span></button>`}).join("")
     :'<p class="empty">Score your picks first.</p>';
   rx();save();
 }
@@ -338,11 +342,16 @@ function rx(){
   $("rhist").textContent=roles.length
     ?`${y} years of ${list(roles.map(r=>R.find(x=>x.id===r).l.toLowerCase()))}. That experience didn't disappear. It's your foundation.`
     :"Your story starts here.";
-  const top=[...loved].sort((a,b)=>total(b)-total(a)||((sc[b]||{}).quick||0)-((sc[a]||{}).quick||0));
-  const done=top.length>=2;
+  const ready=picked.filter(scored);
+  const by=(a,b)=>total(b)-total(a)||((sc[b]||{}).quick||0)-((sc[a]||{}).quick||0);
+  const top=[...loved].sort(by),best=[...ready].sort(by);
+  const need=Math.min(2,ready.length);
+  const done=loved.length>=1&&loved.length>=need;
   const r=$("rx");r.classList.add("flash");setTimeout(()=>r.classList.remove("flash"),180);
-  if(top.length){$("rskill").textContent=lab(top[0]);
-    $("ralso").textContent=top.length>1?"Also strong: "+list(top.slice(1).map(lab).map(s=>s.toLowerCase()))+".":"Choose one or two more you love in step 4.";}
+  if(top.length&&done){$("rskill").textContent=lab(top[0]);
+    $("ralso").textContent=top.length>1?"Also strong: "+list(top.slice(1).map(lab).map(s=>s.toLowerCase()))+".":"";}
+  else if(best.length){$("rskill").textContent=lab((top[0])||best[0]);
+    $("ralso").textContent=(loved.length?"One more! Tap the heart on another favourite in step 4 to unlock your 3 ways to get paid.":"Now tap the hearts on your 2 favourites in step 4 to unlock your 3 ways to get paid.");}
   else if(picked.length){$("rskill").textContent="Almost there";$("ralso").textContent="Score your picks, then choose the ones you love.";}
   else{$("rskill").textContent="Waiting for your answers";$("ralso").textContent="";}
   r.classList.toggle("done",done&&unlocked);
