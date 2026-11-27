@@ -32,6 +32,8 @@ header h1{font-size:clamp(32px,5vw,52px);max-width:18ch}
 .slip .h{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:2px solid var(--maroon);padding-bottom:10px;margin-bottom:12px}
 .slip .rx{font:700 30px/1.05 Fraunces,Georgia,serif;color:var(--maroon);max-width:9ch}
 .slip .h small{text-align:right;font-size:13px;color:#6d5a5d}
+.slip .lede{font:700 28px/1.12 Fraunces,Georgia,serif;color:var(--maroon);margin:4px 0 10px;text-wrap:balance}
+.slip .sub{margin:0;font-size:17px;line-height:1.5}
 .slip dl{margin:0;display:grid;grid-template-columns:auto minmax(0,1fr);gap:6px 12px;font-size:15px}
 .slip dt{color:#6d5a5d;font-weight:600}.slip dd{margin:0;font-weight:600}
 .slip dd.big{font:700 22px/1.15 Fraunces,Georgia,serif;color:var(--maroon)}
@@ -128,16 +130,8 @@ footer{font-size:14px;color:var(--soft)}
   </div>
   <div class="note" aria-hidden="true"><div class="slip">
     <div class="h"><div class="rx">Your next chapter</div><small>Build With Ada</small></div>
-    <dl>
-      <dt>For</dt><dd>You, the one everyone leans on</dd>
-      <dt>Your story</dt><dd>Years of caring, fixing and showing up for others</dd>
-      <dt>The plan</dt><dd class="big">Now it's your turn</dd>
-    </dl>
-    <ul>
-      <li><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#c9a227"/><path d="M7 12.5l3.2 3.2L17 9" fill="none" stroke="#2a1a1d" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Find the skill you already have</li>
-      <li><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#c9a227"/><path d="M7 12.5l3.2 3.2L17 9" fill="none" stroke="#2a1a1d" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>See 3 ways to earn from it</li>
-      <li><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#c9a227"/><path d="M7 12.5l3.2 3.2L17 9" fill="none" stroke="#2a1a1d" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Take your first step, with me beside you</li>
-    </ul>
+    <p class="lede">Finally, something that feels like you.</p>
+    <p class="sub">Find the skill you already have and explore three ways to earn from it, on your terms.</p>
     <div class="sg"><span>Rooting for you,</span><i>Ada</i></div>
   </div></div>
 </div></header>
@@ -173,7 +167,7 @@ footer{font-size:14px;color:var(--soft)}
     </section>
 
     <section class="ways" id="ways" aria-live="polite">
-      <p class="kicker">Your quick win</p>
+      <p class="kicker">Finally. This feels like you!</p>
       <h2 id="wtitle">3 ways to get paid for your skill</h2>
       <p class="hint" style="color:var(--soft);margin:0">These are already inside you. Read them out loud. Which one feels like you?</p>
       <ol id="wlist"></ol>
