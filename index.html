@@ -279,7 +279,14 @@ let S=[
 const Q=[["enjoy","I enjoy doing this"],["proof","I've helped someone with it, even for free"],["pain","It saves people time, money or stress"],["quick","I could start this week with what I have"]];
 const L=["No","Some","Yes"];
 let roles=[],picked=[],sc={},loved=[],cR=[],cS=[],unlocked=false,fname="";
-const FIREBASE_CONFIG=null; /* paste the firebaseConfig object here */
+const FIREBASE_CONFIG={
+  apiKey:"AIzaSyAJkabK8TRsLrxtZsU0KFVAmeTBiL2Vsds",
+  authDomain:"skillfinderleads.firebaseapp.com",
+  projectId:"skillfinderleads",
+  storageBucket:"skillfinderleads.firebasestorage.app",
+  messagingSenderId:"446656880247",
+  appId:"1:446656880247:web:8ad40a5854be76eb0b3072"
+};
 async function saveLead(doc){
   if(!FIREBASE_CONFIG)return false;
   const V="10.12.2";
